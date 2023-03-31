@@ -1,6 +1,6 @@
 import { Empty, Contact, ContactList, ContactID } from '../protos/contacts_pb';
 import { ContactService, IContactServer } from '../protos/contacts_grpc_pb';
-import { ServerUnaryCall, sendUnaryData } from '@grpc/grpc-js';
+import { ServerUnaryCall, sendUnaryData, Server } from '@grpc/grpc-js';
 
 export class ContactServiceImpl implements IContactServer {
     private contacts: Map<string, Contact>;

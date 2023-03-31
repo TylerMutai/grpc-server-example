@@ -1,4 +1,4 @@
-// source: contacts.proto
+// source: src/protos/contacts.proto
 /**
  * @fileoverview
  * @enhanceable
