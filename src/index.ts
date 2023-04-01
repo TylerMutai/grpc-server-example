@@ -1,66 +1,42 @@
-import express from 'express';
-import grpc from '@grpc/grpc-js';
-import {generateAccessToken, generateRefreshToken, isAuthenticated, refreshToken} from './utils/auth';
-import cookieParser from 'cookie-parser';
+const interceptors = require('grpc-interceptors');
+import {Server, ServerCredentials} from '@grpc/grpc-js';
 import {ContactServiceService} from "./protos/contacts_grpc_pb";
+import {AuthServiceService} from "./protos/auth_grpc_pb";
+import {addContact, deleteContact, getContacts, updateContact} from "./services/contactService";
+import {login} from "./services/authService";
 
-const app = express();
-const port = process.env.PORT || 3000;
+const port = `localhost:${process.env.PORT || 5000}`;
+const server = interceptors.serverProxy(new Server());
+server.addService(ContactServiceService, {
+    addContact,
+    getContacts,
+    updateContact,
+    deleteContact
+});
 
-app.use(express.json());
-app.use(cookieParser());
+server.addService(AuthServiceService, {
+    login
+});
 
-// Mock user data for authentication
-const USERS = {
-    'admin': {password: 'admin'},
-    'staff': {password: 'staff'},
-};
+const checkAuthorizationToken = async function (ctx, next) {
 
-app.post('/auth/login', (req, res) => {
-    const {username, password} = req.body;
+    // do stuff before call
+    console.log('Making gRPC call...');
+    console.log(ctx)
 
-    if (USERS[username] && USERS[username].password === password) {
-        const accessToken = generateAccessToken({username});
-        const refreshToken = generateRefreshToken({username});
+    await next()
 
-        res.cookie('refreshToken', refreshToken, {httpOnly: true});
-        res.json({accessToken});
-    } else {
-        res.sendStatus(403);
+    // do stuff after call
+    console.log(ctx.status.code);
+}
+
+server.use(checkAuthorizationToken);
+
+server.bindAsync(port, ServerCredentials.createInsecure(), (err, port) => {
+    if (err) {
+        console.log(err)
+        return;
     }
-});
-
-app.post('/auth/refresh', refreshToken);
-
-app.get('/contacts', isAuthenticated, (req, res) => {
-    // Handle gRPC calls for getting contacts
-});
-
-app.post('/contacts', isAuthenticated, (req, res) => {
-    // Handle gRPC calls for adding contacts
-});
-
-app.put('/contacts', isAuthenticated, (req, res) => {
-    // Handle gRPC calls for updating contacts
-});
-
-app.delete('/contacts/:id', isAuthenticated, (req, res) => {
-    // Handle gRPC calls for deleting contacts
-});
-
-const options = {
-    keepCase: true,
-    longs: String,
-    enums: String,
-    defaults: true,
-    oneofs: true,
-};
-
-const server = new grpc.Server;
-server.addService(ContactServiceService, {});
-server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
-server.start();
-
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
+    server.start();
+    console.log(`listening on port ${port}`)
 });

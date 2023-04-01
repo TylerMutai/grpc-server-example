@@ -1,7 +1,7 @@
 // GENERATED CODE -- DO NOT EDIT!
 
 'use strict';
-var grpc = require('grpc');
+var grpc = require('@grpc/grpc-js');
 var contacts_pb = require('./contacts_pb.js');
 
 function serialize_contacts_Contact(arg) {
