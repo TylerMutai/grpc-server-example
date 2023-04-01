@@ -1,4 +1,4 @@
-const interceptors = require('grpc-interceptors');
+const interceptors = require('@coozzy/node-grpc-interceptors');
 import {Server, ServerCredentials} from '@grpc/grpc-js';
 import {ContactServiceService} from "./protos/contacts_grpc_pb";
 import {AuthServiceService} from "./protos/auth_grpc_pb";
@@ -20,9 +20,10 @@ server.addService(AuthServiceService, {
 
 const checkAuthorizationToken = async function (ctx, next) {
 
-    // do stuff before call
-    console.log('Making gRPC call...');
-    console.log(ctx)
+    if (ctx.service.path !== '/auth.AuthService/Login') {
+        // check if user is authorized to access this route.
+
+    }
 
     await next()
 
