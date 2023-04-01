@@ -1,17 +1,24 @@
-#proto:
-#	protoc -I=src/protos src/protos/*.proto --js_out=import_style=commonjs,binary:src/protos --grpc-web_out=import_style=commonjs+dts,mode=grpcwebtext:src/protos
-
-PROTO_DIR=./src/protos
+PROTO_DIR=src/protos
 
 proto_types:
-	protoc \
-  --plugin="protoc-gen-ts=./node_modules/.bin/protoc-gen-ts" \
-  --js_out="import_style=commonjs,binary:./" --ts_out="./" ${PROTO_DIR}/*.proto
+	grpc_tools_node_protoc \
+	--js_out=import_style=commonjs,binary:${PROTO_DIR} \
+	--grpc_out=${PROTO_DIR} \
+	--plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` \
+	-I ${PROTO_DIR} \
+	${PROTO_DIR}/*.proto
 
 proto_web:
 	protoc \
-  --plugin="protoc-gen-ts=./node_modules/.bin/protoc-gen-ts" \
-  --js_out="import_style=commonjs,binary:./" --ts_out="service=grpc-web:./" ${PROTO_DIR}/*.proto
+	--plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts \
+	--ts_out=grpc_js:${PROTO_DIR} \
+	-I ${PROTO_DIR} \
+	${PROTO_DIR}/*.proto
+
+#proto_web:
+#	protoc \
+#  --plugin="protoc-gen-ts=./node_modules/.bin/protoc-gen-ts" \
+#  --js_out="import_style=commonjs,binary:./" --ts_out="service=grpc-web:./" ${PROTO_DIR}/*.proto
 
 
 # Generate Types

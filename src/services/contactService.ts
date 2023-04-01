@@ -1,54 +1,45 @@
-import { Empty, Contact, ContactList, ContactID } from '../protos/contacts_pb';
-import { ContactService, IContactServer } from '../protos/contacts_grpc_pb';
-import { ServerUnaryCall, sendUnaryData, Server } from '@grpc/grpc-js';
+import {Contact, ContactID, ContactList, Empty} from '../protos/contacts_pb';
+import {sendUnaryData, ServerUnaryCall} from '@grpc/grpc-js';
 
-export class ContactServiceImpl implements IContactServer {
-    private contacts: Map<string, Contact>;
+const contacts = new Map<string, Contact>();
+const addContact = (call: ServerUnaryCall<Contact, ContactID>, callback: sendUnaryData<ContactID>) => {
+    const contact = call.request;
+    const id = Date.now().toString();
 
-    constructor() {
-        this.contacts = new Map<string, Contact>();
+    contact.setId(id);
+    contacts.set(id, contact);
+
+    const contactID = new ContactID();
+    contactID.setId(id);
+
+    callback(null, contactID);
+}
+
+const getContacts = (call: ServerUnaryCall<Empty, ContactList>, callback: sendUnaryData<ContactList>) => {
+    const contactList = new ContactList();
+    contactList.setContactsList(Array.from(contacts.values()));
+    callback(null, contactList);
+}
+
+const updateContact = (call: ServerUnaryCall<Contact, Contact>, callback: sendUnaryData<Contact>) => {
+    const contactToUpdate = call.request;
+    const id = contactToUpdate.getId();
+
+    if (contacts.has(id)) {
+        contacts.set(id, contactToUpdate);
+        callback(null, contactToUpdate);
+    } else {
+        callback(new Error(`Contact not found with ID: ${id}`));
     }
+}
 
-    addContact(call: ServerUnaryCall<Contact>, callback: sendUnaryData<ContactID>): void {
-        const contact = call.request;
-        const id = Date.now().toString();
+const deleteContact = (call: ServerUnaryCall<ContactID, Empty>, callback: sendUnaryData<Empty>) => {
+    const id = call.request.getId();
 
-        contact.setId(id);
-        this.contacts.set(id, contact);
-
-        const contactID = new ContactID();
-        contactID.setId(id);
-
-        callback(null, contactID);
-    }
-
-    getContacts(call: ServerUnaryCall<Empty>, callback: sendUnaryData<ContactList>): void {
-        const contactList = new ContactList();
-        contactList.setContacts(Array.from(this.contacts.values()));
-
-        callback(null, contactList);
-    }
-
-    updateContact(call: ServerUnaryCall<Contact>, callback: sendUnaryData<Contact>): void {
-        const contactToUpdate = call.request;
-        const id = contactToUpdate.getId();
-
-        if (this.contacts.has(id)) {
-            this.contacts.set(id, contactToUpdate);
-            callback(null, contactToUpdate);
-        } else {
-            callback(new Error(`Contact not found with ID: ${id}`));
-        }
-    }
-
-    deleteContact(call: ServerUnaryCall<ContactID>, callback: sendUnaryData<Empty>): void {
-        const id = call.request.getId();
-
-        if (this.contacts.has(id)) {
-            this.contacts.delete(id);
-            callback(null, new Empty());
-        } else {
-            callback(new Error(`Contact not found with ID: ${id}`));
-        }
+    if (contacts.has(id)) {
+        contacts.delete(id);
+        callback(null, new Empty());
+    } else {
+        callback(new Error(`Contact not found with ID: ${id}`));
     }
 }
