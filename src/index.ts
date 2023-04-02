@@ -22,8 +22,12 @@ server.addService(AuthServiceService, {
     refreshAccessToken
 });
 
+const openEndpoints = [
+    '/auth.AuthService/Login',
+    '/auth.AuthService/RefreshAccessToken'
+]
 const checkAuthorizationToken = async function (ctx, next, callback) {
-    if (ctx.service.path !== '/auth.AuthService/Login') {
+    if (!openEndpoints.includes(ctx.service.path)) {
         // check if user is authorized to access this route.
         const metadata = ctx.call.metadata;
         const authToken = metadata.get("authorization").toString();
@@ -32,7 +36,6 @@ const checkAuthorizationToken = async function (ctx, next, callback) {
             callback(new Error("Unauthorized."))
             return;
         }
-
     }
     await next()
 }

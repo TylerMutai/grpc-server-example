@@ -9,7 +9,6 @@ import {
     UserRequest,
     UserResponse
 } from "../protos/auth_pb";
-import e from "express";
 
 // Mock user data for authentication
 const USERS = new Map<string, User>();
@@ -55,7 +54,7 @@ export const login = (call: ServerUnaryCall<LoginRequest, LoginResponse>, callba
 }
 
 export const refreshAccessToken = async (call: ServerUnaryCall<RefreshAccessTokenRequest, RefreshAccessTokenResponse>, callback: sendUnaryData<RefreshAccessTokenResponse>) => {
-    const token = await refreshToken(call.request.getJwttoken());
+    const token = await refreshToken(call.request.getRefreshtoken());
     const response = new RefreshAccessTokenResponse();
     let error: Error = new Error("Unauthorized.");
     let status = 401;
@@ -64,7 +63,7 @@ export const refreshAccessToken = async (call: ServerUnaryCall<RefreshAccessToke
         error = null;
         response.setAccesstoken(token)
     }
-    response.setError(error.message);
+    response.setError(error?.message);
     response.setStatus(status);
     callback(error, response)
 }

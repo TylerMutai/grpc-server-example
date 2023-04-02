@@ -95,7 +95,7 @@ var AuthServiceService = exports.AuthServiceService = {
     responseDeserialize: deserialize_auth_UserResponse,
   },
   refreshAccessToken: {
-    path: '/auth.AuthService/refreshAccessToken',
+    path: '/auth.AuthService/RefreshAccessToken',
     requestStream: false,
     responseStream: false,
     requestType: auth_pb.RefreshAccessTokenRequest,

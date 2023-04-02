@@ -10,7 +10,7 @@ import * as auth_pb from "./auth_pb";
 interface IAuthServiceService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
     login: IAuthServiceService_ILogin;
     userMe: IAuthServiceService_IUserMe;
-    refreshAccessToken: IAuthServiceService_IrefreshAccessToken;
+    refreshAccessToken: IAuthServiceService_IRefreshAccessToken;
 }
 
 interface IAuthServiceService_ILogin extends grpc.MethodDefinition<auth_pb.LoginRequest, auth_pb.LoginResponse> {
@@ -31,8 +31,8 @@ interface IAuthServiceService_IUserMe extends grpc.MethodDefinition<auth_pb.User
     responseSerialize: grpc.serialize<auth_pb.UserResponse>;
     responseDeserialize: grpc.deserialize<auth_pb.UserResponse>;
 }
-interface IAuthServiceService_IrefreshAccessToken extends grpc.MethodDefinition<auth_pb.RefreshAccessTokenRequest, auth_pb.RefreshAccessTokenResponse> {
-    path: "/auth.AuthService/refreshAccessToken";
+interface IAuthServiceService_IRefreshAccessToken extends grpc.MethodDefinition<auth_pb.RefreshAccessTokenRequest, auth_pb.RefreshAccessTokenResponse> {
+    path: "/auth.AuthService/RefreshAccessToken";
     requestStream: false;
     responseStream: false;
     requestSerialize: grpc.serialize<auth_pb.RefreshAccessTokenRequest>;

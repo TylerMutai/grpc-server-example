@@ -108,8 +108,8 @@ export namespace LoginResponse {
 }
 
 export class RefreshAccessTokenRequest extends jspb.Message { 
-    getJwttoken(): string;
-    setJwttoken(value: string): RefreshAccessTokenRequest;
+    getRefreshtoken(): string;
+    setRefreshtoken(value: string): RefreshAccessTokenRequest;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): RefreshAccessTokenRequest.AsObject;
@@ -123,7 +123,7 @@ export class RefreshAccessTokenRequest extends jspb.Message {
 
 export namespace RefreshAccessTokenRequest {
     export type AsObject = {
-        jwttoken: string,
+        refreshtoken: string,
     }
 }
 

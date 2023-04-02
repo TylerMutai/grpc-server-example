@@ -6,10 +6,12 @@ const REFRESH_SECRET_KEY = 'your-refresh-secret-key'; // You can configure this 
 let user: User | undefined;
 
 export function generateAccessToken(user: object): string {
-    return jwt.sign(user, SECRET_KEY, {expiresIn: '15m'});
+    delete (user as any).exp
+    return jwt.sign(user, SECRET_KEY, {expiresIn: '5m'});
 }
 
 export function generateRefreshToken(user: object): string {
+    delete (user as any).exp
     return jwt.sign(user, REFRESH_SECRET_KEY, {expiresIn: '7d'});
 }
 
@@ -46,6 +48,7 @@ export function refreshToken(refreshToken: string): Promise<string> {
 
         jwt.verify(refreshToken, REFRESH_SECRET_KEY, (err, user) => {
             if (err) {
+                console.log(err)
                 resolve("");
                 return;
             }
