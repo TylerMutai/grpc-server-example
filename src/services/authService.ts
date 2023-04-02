@@ -3,17 +3,25 @@ import {auth} from "../protos/auth";
 import {generateAccessToken, generateRefreshToken} from "../utils/auth";
 import LoginRequest = auth.LoginRequest;
 import LoginResponse = auth.LoginResponse;
+import {User} from "../types/user";
 
 // Mock user data for authentication
-const USERS = {
-    'admin': {password: 'admin'},
-    'staff': {password: 'staff'},
-};
+const USERS = new Map<string, User>();
+USERS.set(
+    "admin", {
+        id: 1, username: "admin", password: "admin",
+    }
+)
+USERS.set(
+    "staff", {
+        id: 2, username: "staff", password: "staff",
+    }
+)
 export const login = (call: ServerUnaryCall<LoginRequest, LoginResponse>, callback: sendUnaryData<LoginResponse>) => {
     const request = call.request
     const response = new LoginResponse();
 
-    if (USERS[request.email] && USERS[request.email].password === request.password) {
+    if (USERS.get(request.email) && USERS.get(request.email).password === request.password) {
         const email = request.email;
         const accessToken = generateAccessToken({email});
         const refreshToken = generateRefreshToken({email});
