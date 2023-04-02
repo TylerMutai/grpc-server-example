@@ -1,10 +1,7 @@
 import {sendUnaryData, ServerUnaryCall} from "@grpc/grpc-js";
-import {auth} from "../protos/auth";
 import {generateAccessToken, generateRefreshToken, getLoggedInUser} from "../utils/auth";
 import {User} from "../types/user";
-import {UserRequest, UserResponse} from "../protos/auth_pb";
-import LoginRequest = auth.LoginRequest;
-import LoginResponse = auth.LoginResponse;
+import {LoginRequest, LoginResponse, UserRequest, UserResponse} from "../protos/auth_pb";
 
 // Mock user data for authentication
 const USERS = new Map<string, User>();
@@ -33,18 +30,18 @@ export const login = (call: ServerUnaryCall<LoginRequest, LoginResponse>, callba
     const request = call.request
     const response = new LoginResponse();
 
-    if (USERS.get(request.email) && USERS.get(request.email).password === request.password) {
-        const email = request.email;
+    if (USERS.get(request.getUsername()) && USERS.get(request.getUsername()).password === request.getPassword()) {
+        const email = request.getUsername();
         const accessToken = generateAccessToken({email});
         const refreshToken = generateRefreshToken({email});
-        response.jwtToken = accessToken;
-        response.refreshToken = refreshToken;
-        response.status = 200;
+        response.setJwttoken(accessToken);
+        response.setRefreshtoken(refreshToken);
+        response.setStatus(200);
         callback(null, response)
     } else {
         const error = "Unauthorized. Check credentials and try again."
-        response.error = error;
-        response.status = 401;
+        response.setError(error);
+        response.setStatus(401);
         callback(new Error(error), response)
     }
 }

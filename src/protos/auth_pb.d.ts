@@ -56,8 +56,8 @@ export namespace UserResponse {
 }
 
 export class LoginRequest extends jspb.Message { 
-    getEmail(): string;
-    setEmail(value: string): LoginRequest;
+    getUsername(): string;
+    setUsername(value: string): LoginRequest;
     getPassword(): string;
     setPassword(value: string): LoginRequest;
 
@@ -73,7 +73,7 @@ export class LoginRequest extends jspb.Message {
 
 export namespace LoginRequest {
     export type AsObject = {
-        email: string,
+        username: string,
         password: string,
     }
 }
