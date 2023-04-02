@@ -5,7 +5,7 @@ import {AuthServiceService} from "./protos/auth_grpc_pb";
 import {addContact, deleteContact, getContacts, updateContact} from "./services/contactService";
 import {login} from "./services/authService";
 
-const interceptors = require('@coozzy/node-grpc-interceptors');
+const interceptors = require('grpcjs-interceptors');
 
 const port = `localhost:${process.env.PORT || 5000}`;
 const server = interceptors.serverProxy(new Server());
@@ -20,20 +20,16 @@ server.addService(AuthServiceService, {
     login
 });
 
-const checkAuthorizationToken = async function (ctx, next) {
-    let statusCode = 0;
-    // let errorMsg = "";
+const checkAuthorizationToken = async function (ctx, next, callback) {
     if (ctx.service.path !== '/auth.AuthService/Login') {
         // check if user is authorized to access this route.
         const metadata = new Metadata();
         const authToken = metadata.get("authorization").toString();
         if (!await isAuthenticated(authToken)) {
-            statusCode = 16;
-            // errorMsg = "Unauthenticated."
+            callback(new Error("Unauthorized."))
         }
 
     }
-    ctx.status.code = statusCode
     await next()
 }
 

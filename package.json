@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@coozzy/node-grpc-interceptors": "^0.3.0",
     "@grpc/grpc-js": "^1.8.13",
     "@improbable-eng/grpc-web": "^0.15.0",
     "@types/express": "^4.17.17",
@@ -20,6 +19,7 @@
     "google-protobuf": "^3.21.2",
     "grpc-tools": "^1.12.4",
     "grpc-web": "^1.4.2",
+    "grpcjs-interceptors": "^0.1.15",
     "jsonwebtoken": "^9.0.0",
     "protoc-gen-grpc-web": "^1.4.1",
     "protoc-gen-ts": "^0.8.6",
