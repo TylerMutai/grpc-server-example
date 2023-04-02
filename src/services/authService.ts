@@ -1,7 +1,15 @@
 import {sendUnaryData, ServerUnaryCall} from "@grpc/grpc-js";
-import {generateAccessToken, generateRefreshToken, getLoggedInUser} from "../utils/auth";
+import {generateAccessToken, generateRefreshToken, getLoggedInUser, refreshToken} from "../utils/auth";
 import {User} from "../types/user";
-import {LoginRequest, LoginResponse, UserRequest, UserResponse} from "../protos/auth_pb";
+import {
+    LoginRequest,
+    LoginResponse,
+    RefreshAccessTokenRequest,
+    RefreshAccessTokenResponse,
+    UserRequest,
+    UserResponse
+} from "../protos/auth_pb";
+import e from "express";
 
 // Mock user data for authentication
 const USERS = new Map<string, User>();
@@ -31,9 +39,9 @@ export const login = (call: ServerUnaryCall<LoginRequest, LoginResponse>, callba
     const response = new LoginResponse();
 
     if (USERS.get(request.getUsername()) && USERS.get(request.getUsername()).password === request.getPassword()) {
-        const email = request.getUsername();
-        const accessToken = generateAccessToken({email});
-        const refreshToken = generateRefreshToken({email});
+        const user = USERS.get(request.getUsername());
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
         response.setJwttoken(accessToken);
         response.setRefreshtoken(refreshToken);
         response.setStatus(200);
@@ -44,4 +52,19 @@ export const login = (call: ServerUnaryCall<LoginRequest, LoginResponse>, callba
         response.setStatus(401);
         callback(new Error(error), response)
     }
+}
+
+export const refreshAccessToken = async (call: ServerUnaryCall<RefreshAccessTokenRequest, RefreshAccessTokenResponse>, callback: sendUnaryData<RefreshAccessTokenResponse>) => {
+    const token = await refreshToken(call.request.getJwttoken());
+    const response = new RefreshAccessTokenResponse();
+    let error: Error = new Error("Unauthorized.");
+    let status = 401;
+    if (token) {
+        status = 200;
+        error = null;
+        response.setAccesstoken(token)
+    }
+    response.setError(error.message);
+    response.setStatus(status);
+    callback(error, response)
 }

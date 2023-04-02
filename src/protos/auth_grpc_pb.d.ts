@@ -10,6 +10,7 @@ import * as auth_pb from "./auth_pb";
 interface IAuthServiceService extends grpc.ServiceDefinition<grpc.UntypedServiceImplementation> {
     login: IAuthServiceService_ILogin;
     userMe: IAuthServiceService_IUserMe;
+    refreshAccessToken: IAuthServiceService_IrefreshAccessToken;
 }
 
 interface IAuthServiceService_ILogin extends grpc.MethodDefinition<auth_pb.LoginRequest, auth_pb.LoginResponse> {
@@ -30,12 +31,22 @@ interface IAuthServiceService_IUserMe extends grpc.MethodDefinition<auth_pb.User
     responseSerialize: grpc.serialize<auth_pb.UserResponse>;
     responseDeserialize: grpc.deserialize<auth_pb.UserResponse>;
 }
+interface IAuthServiceService_IrefreshAccessToken extends grpc.MethodDefinition<auth_pb.RefreshAccessTokenRequest, auth_pb.RefreshAccessTokenResponse> {
+    path: "/auth.AuthService/refreshAccessToken";
+    requestStream: false;
+    responseStream: false;
+    requestSerialize: grpc.serialize<auth_pb.RefreshAccessTokenRequest>;
+    requestDeserialize: grpc.deserialize<auth_pb.RefreshAccessTokenRequest>;
+    responseSerialize: grpc.serialize<auth_pb.RefreshAccessTokenResponse>;
+    responseDeserialize: grpc.deserialize<auth_pb.RefreshAccessTokenResponse>;
+}
 
 export const AuthServiceService: IAuthServiceService;
 
 export interface IAuthServiceServer extends grpc.UntypedServiceImplementation {
     login: grpc.handleUnaryCall<auth_pb.LoginRequest, auth_pb.LoginResponse>;
     userMe: grpc.handleUnaryCall<auth_pb.UserRequest, auth_pb.UserResponse>;
+    refreshAccessToken: grpc.handleUnaryCall<auth_pb.RefreshAccessTokenRequest, auth_pb.RefreshAccessTokenResponse>;
 }
 
 export interface IAuthServiceClient {
@@ -45,6 +56,9 @@ export interface IAuthServiceClient {
     userMe(request: auth_pb.UserRequest, callback: (error: grpc.ServiceError | null, response: auth_pb.UserResponse) => void): grpc.ClientUnaryCall;
     userMe(request: auth_pb.UserRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: auth_pb.UserResponse) => void): grpc.ClientUnaryCall;
     userMe(request: auth_pb.UserRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: auth_pb.UserResponse) => void): grpc.ClientUnaryCall;
+    refreshAccessToken(request: auth_pb.RefreshAccessTokenRequest, callback: (error: grpc.ServiceError | null, response: auth_pb.RefreshAccessTokenResponse) => void): grpc.ClientUnaryCall;
+    refreshAccessToken(request: auth_pb.RefreshAccessTokenRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: auth_pb.RefreshAccessTokenResponse) => void): grpc.ClientUnaryCall;
+    refreshAccessToken(request: auth_pb.RefreshAccessTokenRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: auth_pb.RefreshAccessTokenResponse) => void): grpc.ClientUnaryCall;
 }
 
 export class AuthServiceClient extends grpc.Client implements IAuthServiceClient {
@@ -55,4 +69,7 @@ export class AuthServiceClient extends grpc.Client implements IAuthServiceClient
     public userMe(request: auth_pb.UserRequest, callback: (error: grpc.ServiceError | null, response: auth_pb.UserResponse) => void): grpc.ClientUnaryCall;
     public userMe(request: auth_pb.UserRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: auth_pb.UserResponse) => void): grpc.ClientUnaryCall;
     public userMe(request: auth_pb.UserRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: auth_pb.UserResponse) => void): grpc.ClientUnaryCall;
+    public refreshAccessToken(request: auth_pb.RefreshAccessTokenRequest, callback: (error: grpc.ServiceError | null, response: auth_pb.RefreshAccessTokenResponse) => void): grpc.ClientUnaryCall;
+    public refreshAccessToken(request: auth_pb.RefreshAccessTokenRequest, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: auth_pb.RefreshAccessTokenResponse) => void): grpc.ClientUnaryCall;
+    public refreshAccessToken(request: auth_pb.RefreshAccessTokenRequest, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: auth_pb.RefreshAccessTokenResponse) => void): grpc.ClientUnaryCall;
 }

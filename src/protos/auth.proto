@@ -5,6 +5,7 @@ package auth;
 service AuthService {
   rpc Login (LoginRequest) returns (LoginResponse);
   rpc UserMe (UserRequest) returns  (UserResponse);
+  rpc refreshAccessToken (RefreshAccessTokenRequest) returns  (RefreshAccessTokenResponse);
 }
 
 message UserRequest{}
@@ -27,4 +28,14 @@ message LoginResponse{
   string error = 2;
   string jwtToken = 3;
   string refreshToken = 4;
+}
+
+message RefreshAccessTokenRequest{
+  string jwtToken = 3;
+}
+
+message RefreshAccessTokenResponse{
+  int32 status = 1;
+  string error = 2;
+  string accessToken = 4;
 }

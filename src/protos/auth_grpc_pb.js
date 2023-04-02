@@ -26,6 +26,28 @@ function deserialize_auth_LoginResponse(buffer_arg) {
   return auth_pb.LoginResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_auth_RefreshAccessTokenRequest(arg) {
+  if (!(arg instanceof auth_pb.RefreshAccessTokenRequest)) {
+    throw new Error('Expected argument of type auth.RefreshAccessTokenRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_auth_RefreshAccessTokenRequest(buffer_arg) {
+  return auth_pb.RefreshAccessTokenRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_auth_RefreshAccessTokenResponse(arg) {
+  if (!(arg instanceof auth_pb.RefreshAccessTokenResponse)) {
+    throw new Error('Expected argument of type auth.RefreshAccessTokenResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_auth_RefreshAccessTokenResponse(buffer_arg) {
+  return auth_pb.RefreshAccessTokenResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_auth_UserRequest(arg) {
   if (!(arg instanceof auth_pb.UserRequest)) {
     throw new Error('Expected argument of type auth.UserRequest');
@@ -71,6 +93,17 @@ var AuthServiceService = exports.AuthServiceService = {
     requestDeserialize: deserialize_auth_UserRequest,
     responseSerialize: serialize_auth_UserResponse,
     responseDeserialize: deserialize_auth_UserResponse,
+  },
+  refreshAccessToken: {
+    path: '/auth.AuthService/refreshAccessToken',
+    requestStream: false,
+    responseStream: false,
+    requestType: auth_pb.RefreshAccessTokenRequest,
+    responseType: auth_pb.RefreshAccessTokenResponse,
+    requestSerialize: serialize_auth_RefreshAccessTokenRequest,
+    requestDeserialize: deserialize_auth_RefreshAccessTokenRequest,
+    responseSerialize: serialize_auth_RefreshAccessTokenResponse,
+    responseDeserialize: deserialize_auth_RefreshAccessTokenResponse,
   },
 };
 

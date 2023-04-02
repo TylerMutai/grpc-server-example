@@ -24,9 +24,7 @@ export async function isAuthenticated(authHeader: string): Promise<boolean> {
             return;
         }
 
-        const token = authHeader.split(' ')[1];
-
-        jwt.verify(token, SECRET_KEY, (err, u) => {
+        jwt.verify(authHeader, SECRET_KEY, (err, u) => {
             if (err) {
                 resolve(false)
                 return;

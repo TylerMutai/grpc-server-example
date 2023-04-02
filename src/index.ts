@@ -1,9 +1,9 @@
 import {isAuthenticated} from "./utils/auth";
-import {Metadata, Server, ServerCredentials} from '@grpc/grpc-js';
+import {Server, ServerCredentials} from '@grpc/grpc-js';
 import {ContactServiceService} from "./protos/contacts_grpc_pb";
 import {AuthServiceService} from "./protos/auth_grpc_pb";
 import {addContact, deleteContact, getContacts, updateContact} from "./services/contactService";
-import {login, userMe} from "./services/authService";
+import {login, refreshAccessToken, userMe} from "./services/authService";
 
 const interceptors = require('grpcjs-interceptors');
 
@@ -19,14 +19,16 @@ server.addService(ContactServiceService, {
 server.addService(AuthServiceService, {
     login,
     userMe,
+    refreshAccessToken
 });
 
 const checkAuthorizationToken = async function (ctx, next, callback) {
     if (ctx.service.path !== '/auth.AuthService/Login') {
         // check if user is authorized to access this route.
-        const metadata = new Metadata();
+        const metadata = ctx.call.metadata;
         const authToken = metadata.get("authorization").toString();
-        if (!await isAuthenticated(authToken)) {
+        const userIsAuthenticated = await isAuthenticated(authToken)
+        if (!userIsAuthenticated) {
             callback(new Error("Unauthorized."))
             return;
         }
