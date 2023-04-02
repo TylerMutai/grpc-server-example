@@ -1,9 +1,10 @@
 import {sendUnaryData, ServerUnaryCall} from "@grpc/grpc-js";
 import {auth} from "../protos/auth";
-import {generateAccessToken, generateRefreshToken} from "../utils/auth";
+import {generateAccessToken, generateRefreshToken, getLoggedInUser} from "../utils/auth";
+import {User} from "../types/user";
+import {UserRequest, UserResponse} from "../protos/auth_pb";
 import LoginRequest = auth.LoginRequest;
 import LoginResponse = auth.LoginResponse;
-import {User} from "../types/user";
 
 // Mock user data for authentication
 const USERS = new Map<string, User>();
@@ -17,6 +18,17 @@ USERS.set(
         id: 2, username: "staff", password: "staff",
     }
 )
+
+export const userMe = (call: ServerUnaryCall<UserRequest, UserResponse>, callback: sendUnaryData<UserResponse>) => {
+    const response = new UserResponse();
+    const user = getLoggedInUser();
+    response.setId(`${user.id}`);
+    response.setStatus(200);
+    response.setError("");
+    response.setUsername(user.username);
+    response.setPassword(user.password);
+    callback(null, response)
+}
 export const login = (call: ServerUnaryCall<LoginRequest, LoginResponse>, callback: sendUnaryData<LoginResponse>) => {
     const request = call.request
     const response = new LoginResponse();

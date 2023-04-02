@@ -6,6 +6,55 @@
 
 import * as jspb from "google-protobuf";
 
+export class UserRequest extends jspb.Message { 
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): UserRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: UserRequest): UserRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: UserRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): UserRequest;
+    static deserializeBinaryFromReader(message: UserRequest, reader: jspb.BinaryReader): UserRequest;
+}
+
+export namespace UserRequest {
+    export type AsObject = {
+    }
+}
+
+export class UserResponse extends jspb.Message { 
+    getStatus(): number;
+    setStatus(value: number): UserResponse;
+    getError(): string;
+    setError(value: string): UserResponse;
+    getUsername(): string;
+    setUsername(value: string): UserResponse;
+    getId(): string;
+    setId(value: string): UserResponse;
+    getPassword(): string;
+    setPassword(value: string): UserResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): UserResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: UserResponse): UserResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: UserResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): UserResponse;
+    static deserializeBinaryFromReader(message: UserResponse, reader: jspb.BinaryReader): UserResponse;
+}
+
+export namespace UserResponse {
+    export type AsObject = {
+        status: number,
+        error: string,
+        username: string,
+        id: string,
+        password: string,
+    }
+}
+
 export class LoginRequest extends jspb.Message { 
     getEmail(): string;
     setEmail(value: string): LoginRequest;

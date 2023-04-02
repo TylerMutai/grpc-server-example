@@ -13,7 +13,7 @@ export function generateRefreshToken(user: object): string {
     return jwt.sign(user, REFRESH_SECRET_KEY, {expiresIn: '7d'});
 }
 
-export async function getLoggedInUser() {
+export function getLoggedInUser() {
     return user;
 }
 

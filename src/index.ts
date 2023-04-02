@@ -3,7 +3,7 @@ import {Metadata, Server, ServerCredentials} from '@grpc/grpc-js';
 import {ContactServiceService} from "./protos/contacts_grpc_pb";
 import {AuthServiceService} from "./protos/auth_grpc_pb";
 import {addContact, deleteContact, getContacts, updateContact} from "./services/contactService";
-import {login} from "./services/authService";
+import {login, userMe} from "./services/authService";
 
 const interceptors = require('grpcjs-interceptors');
 
@@ -17,7 +17,8 @@ server.addService(ContactServiceService, {
 });
 
 server.addService(AuthServiceService, {
-    login
+    login,
+    userMe,
 });
 
 const checkAuthorizationToken = async function (ctx, next, callback) {
@@ -27,6 +28,7 @@ const checkAuthorizationToken = async function (ctx, next, callback) {
         const authToken = metadata.get("authorization").toString();
         if (!await isAuthenticated(authToken)) {
             callback(new Error("Unauthorized."))
+            return;
         }
 
     }
