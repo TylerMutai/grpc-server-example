@@ -11,5 +11,9 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+# Build the app
+RUN npm run build
+
+# Expose the port and start the app
 EXPOSE 5000
 CMD [ "npm", "start" ]
