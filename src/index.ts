@@ -7,7 +7,7 @@ import {login, refreshAccessToken, userMe} from "./services/authService";
 
 const interceptors = require('grpcjs-interceptors');
 
-const port = `localhost:${process.env.PORT || 5000}`;
+const port = `localhost:${process.env.PORT || 8080}`;
 const server = interceptors.serverProxy(new Server());
 server.addService(ContactServiceService, {
     addContact,
