@@ -42,7 +42,7 @@ const checkAuthorizationToken = async function (ctx, next, callback) {
 
 server.use(checkAuthorizationToken);
 
-server.bindAsync(port, ServerCredentials.createInsecure(), (err, port) => {
+server.bindAsync(`0.0.0.0:${port}`, ServerCredentials.createInsecure(), (err, port) => {
     if (err) {
         console.log(err)
         return;
