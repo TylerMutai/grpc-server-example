@@ -3,7 +3,17 @@ services:
   envoy:
     build:
       context: ./
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./docker/envoy/Dockerfile
     image: grpcweb/envoy
     ports:
       - "8080:8080"
+      - "9901:9901"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  node-server:
+    build:
+      context: ./
+      dockerfile: ./docker/node_server/Dockerfile
+#    ports:
+#      - "5000:5000"

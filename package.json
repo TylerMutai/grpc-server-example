@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "ts-node-esm src/index.ts"
+    "dev": "ts-node-esm src/index.ts",
+    "build": "tsc && cp -r src/protos dist/",
+    "start": "node dist/app.js"
   },
   "keywords": [],
   "author": "",

@@ -7,7 +7,7 @@ import {login, refreshAccessToken, userMe} from "./services/authService";
 
 const interceptors = require('grpcjs-interceptors');
 
-const port = `localhost:${5000}`;
+const host = `node-server:${5000}`;
 const server = interceptors.serverProxy(new Server());
 
 server.addService(ContactServiceService, {
@@ -43,11 +43,11 @@ const checkAuthorizationToken = async function (ctx, next, callback) {
 
 server.use(checkAuthorizationToken);
 
-server.bindAsync(port, ServerCredentials.createInsecure(), (err, port) => {
+server.bindAsync(host, ServerCredentials.createInsecure(), (err, port) => {
     if (err) {
         console.log(err)
         return;
     }
     server.start();
-    console.log(`listening on port ${port}`)
+    console.log(`listening on ${host}`)
 });

@@ -1,4 +1,4 @@
-## grpc-contacts-client
+## grpc-contacts-server
 
 This backend server acts as the entry point for frontend requests for purposes of the coding challenge.
 
@@ -11,10 +11,10 @@ Install docker & docker-compose:
 
 After you have your docker service running:
 *Ensure that you have no other applications running on the ports: 8080 and 5000*
-1. Clone the GRPC-Web proxy `git clone https://github.com/grpc/grpc-web`
-2. Run `cd grpc-web`
-3. Run `docker-compose up node-server envoy commonjs-client`
-The server should now be accessible at: http://localhost:8081/
+
+1. cd into the directory containing this repo, i.e. `cd grpc-contacts-server`
+2. Run `docker-compose up --build`
+The server should now be accessible at: http://localhost:8080/
 
 The default predefined user accounts for login are:
 ```
