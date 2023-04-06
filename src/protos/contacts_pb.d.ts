@@ -77,6 +77,10 @@ export class ContactList extends jspb.Message {
     getContactsList(): Array<Contact>;
     setContactsList(value: Array<Contact>): ContactList;
     addContacts(value?: Contact, index?: number): Contact;
+    getError(): string;
+    setError(value: string): ContactList;
+    getStatus(): number;
+    setStatus(value: number): ContactList;
 
     serializeBinary(): Uint8Array;
     toObject(includeInstance?: boolean): ContactList.AsObject;
@@ -91,5 +95,7 @@ export class ContactList extends jspb.Message {
 export namespace ContactList {
     export type AsObject = {
         contactsList: Array<Contact.AsObject>,
+        error: string,
+        status: number,
     }
 }

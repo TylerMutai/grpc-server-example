@@ -24,4 +24,6 @@ message ContactID {
 
 message ContactList {
   repeated Contact contacts = 1;
+  string error = 2;
+  int32 status = 3;
 }

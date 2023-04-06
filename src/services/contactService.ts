@@ -18,6 +18,7 @@ export const addContact = (call: ServerUnaryCall<Contact, ContactID>, callback: 
 export const getContacts = (call: ServerUnaryCall<Empty, ContactList>, callback: sendUnaryData<ContactList>) => {
     const contactList = new ContactList();
     contactList.setContactsList(Array.from(contacts.values()));
+    contactList.setStatus(200);
     callback(null, contactList);
 }
 

@@ -600,7 +600,9 @@ proto.contacts.ContactList.prototype.toObject = function(opt_includeInstance) {
 proto.contacts.ContactList.toObject = function(includeInstance, msg) {
   var f, obj = {
     contactsList: jspb.Message.toObjectList(msg.getContactsList(),
-    proto.contacts.Contact.toObject, includeInstance)
+    proto.contacts.Contact.toObject, includeInstance),
+    error: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    status: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
@@ -642,6 +644,14 @@ proto.contacts.ContactList.deserializeBinaryFromReader = function(msg, reader) {
       reader.readMessage(value,proto.contacts.Contact.deserializeBinaryFromReader);
       msg.addContacts(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setError(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setStatus(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -677,6 +687,20 @@ proto.contacts.ContactList.serializeBinaryToWriter = function(message, writer) {
       1,
       f,
       proto.contacts.Contact.serializeBinaryToWriter
+    );
+  }
+  f = message.getError();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = message.getStatus();
+  if (f !== 0) {
+    writer.writeInt32(
+      3,
+      f
     );
   }
 };
@@ -717,6 +741,42 @@ proto.contacts.ContactList.prototype.addContacts = function(opt_value, opt_index
  */
 proto.contacts.ContactList.prototype.clearContactsList = function() {
   return this.setContactsList([]);
+};
+
+
+/**
+ * optional string error = 2;
+ * @return {string}
+ */
+proto.contacts.ContactList.prototype.getError = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.contacts.ContactList} returns this
+ */
+proto.contacts.ContactList.prototype.setError = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional int32 status = 3;
+ * @return {number}
+ */
+proto.contacts.ContactList.prototype.getStatus = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.contacts.ContactList} returns this
+ */
+proto.contacts.ContactList.prototype.setStatus = function(value) {
+  return jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
