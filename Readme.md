@@ -6,6 +6,7 @@ To run locally:
 
 ### Option 1:
 This option does not provide support for gRPC-Web.
+Adjust host in `values/globals.ts` accordingly.
 
 1. Run `npm install`
 2. Run `npm run dev`
@@ -13,6 +14,7 @@ This option does not provide support for gRPC-Web.
 
 ### Option 2:
 This option provides support for gRPC-Web by using envoy as a proxy server.
+Adjust host in `values/globals.ts` accordingly.
 Install docker & docker-compose:
 
 1. For mac: Follow the instructions at: https://docs.docker.com/desktop/install/mac-install/

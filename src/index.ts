@@ -4,10 +4,10 @@ import {ContactServiceService} from "./protos/contacts_grpc_pb";
 import {AuthServiceService} from "./protos/auth_grpc_pb";
 import {addContact, deleteContact, getContacts, updateContact} from "./services/contactService";
 import {login, refreshAccessToken, userMe} from "./services/authService";
+import {host} from "./values/globals";
 
 const interceptors = require('grpcjs-interceptors');
 
-const host = `localhost:${5000}`;
 const server = interceptors.serverProxy(new Server());
 
 server.addService(ContactServiceService, {
